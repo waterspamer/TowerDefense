@@ -8,6 +8,8 @@ TagManager:
   - Enemy
   - Projectile
   - GameMaster
+  - Turret
+  - Rocket
   layers:
   - Default
   - TransparentFX

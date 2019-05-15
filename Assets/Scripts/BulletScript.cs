@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BulletScript : MonoBehaviour
+public class BulletScript : MonoBehaviour, IPooledObject
 {
 
-    private Transform target;
+    public Transform target;
 
     public GameObject ExplosionEffect;
 
@@ -16,6 +16,11 @@ public class BulletScript : MonoBehaviour
     [SerializeField] bool DealDamageInRange;
 
     public float speed = 70f;
+
+    public void OnObjectSpawn()
+    {
+
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -36,8 +41,9 @@ public class BulletScript : MonoBehaviour
             {
                 Instantiate(ExplosionEffect, transform.position, transform.rotation);
                 HitTargetsInRange();
-            } 
-            Destroy(gameObject);
+                ObjectPooler.instance.ReturnToPool(gameObject, "Rockets");
+            }
+            ObjectPooler.instance.ReturnToPool(gameObject, "Bullets");
             return;
         }
         transform.LookAt(target);
@@ -66,13 +72,13 @@ public class BulletScript : MonoBehaviour
                 target.GetComponent<Enemy>().HealthLogic(damageOnHit * (1 - tmp / DamageRange));
             }
         }
-        Destroy(gameObject);
+        ObjectPooler.instance.ReturnToPool(gameObject, "Rockets");
     }
 
     void HitTarget()
     {
         if (ExplosionEffect != null) Instantiate(ExplosionEffect, transform.position, transform.rotation);
         target.GetComponent<Enemy>().HealthLogic(damageOnHit);
-        Destroy(gameObject);
+        ObjectPooler.instance.ReturnToPool(gameObject, "Bullets");
     }
 }

@@ -67,7 +67,8 @@ public class TurretScript : MonoBehaviour
     void Shoot()
     {
         Instantiate(ShootEffect, firePoint.transform.position, firePoint.transform.rotation);
-        var bulletGO = (GameObject)Instantiate(bulletPref, firePoint.position, firePoint.rotation);
+        var bulletGO = ObjectPooler.instance.SpawnFromPool(gameObject.CompareTag("Turret")? "Bullets" : "Rockets", firePoint.position, firePoint.rotation);
+        //var bulletGO = (GameObject)Instantiate(bulletPref, firePoint.position, firePoint.rotation);
         var bul = bulletGO.GetComponent<BulletScript>();
         if (bul != null)
         {
